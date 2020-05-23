@@ -20,7 +20,7 @@ $ mkdir arch/ultra96v2
 $ mv dpu-03-26-2020-13-30.dcf arch/ultra96v2/ultra96v2.dcf
 ```
 
-### Edit ``arch/arch.json``
+### Edit arch/arch.json
 
 - Add path the .dcf file path (relative to the model directory of your choice) to ``"dcf"`` section of ``arch/arch.json``
 
@@ -37,5 +37,5 @@ $ mv dpu-03-26-2020-13-30.dcf arch/ultra96v2/ultra96v2.dcf
 - Copy edited ``arch.json`` into ``arch/<board name>``
 
 ```
-$ mv arch.json arch/
+$ mv arch/arch.json arch/<board name>
 ```
