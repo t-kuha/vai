@@ -4,7 +4,7 @@
 #include <memory>
 #include <endian.h>
 
-#include "dnndk/n2cube.h"
+#include "dnndk/dnndk.h"
 
 
 #define NODE_NAME_INPUT     "conv2d_Conv2D"
