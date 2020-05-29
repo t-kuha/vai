@@ -13,7 +13,6 @@ def calib_input(iter):
 
     print('iter = %d' % iter)
 
-    # line = open(calib_image_list).readlines()
     for index in range(0, calib_batch_size):
         idx_ = (iter * calib_batch_size + index) % len(img_list)
         path = img_list[idx_]
