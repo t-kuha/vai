@@ -1,8 +1,9 @@
+import os
 import tensorflow as tf
 import numpy as np
 
 # Load model
-model = tf.keras.models.load_model('cifar10-resnet.h5')
+model = tf.keras.models.load_model(os.path.join('keras', 'cifar10-resnet.h5'))
 # model.summary()
 
 (x_train, y_train), (x_test, y_test) = tf.keras.datasets.cifar10.load_data()
