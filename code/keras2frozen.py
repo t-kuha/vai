@@ -1,11 +1,7 @@
 """
-# freeze_graph \
-# --input_checkpoint=cifar10-resnet/model.ckpt-71108 \
-# --output_graph=cifar10-resnet.pb \
-# --output_node_names='softmax_tensor' \
-# --input_meta_graph=./cifar10-resnet/model.ckpt-71108.meta \
-# --input_binary=true
+Freeze Keras .h5 model for quantization
 """
+
 import os
 import argparse
 import tempfile
@@ -26,26 +22,30 @@ def main(keras_model_path):
         return
 
     # Load model
+    tf.keras.backend.set_learning_phase(0)
     model = tf.keras.models.load_model(keras_model_path)
     # model.summary()
 
     # Model info (input/output nodes)
-    input_nodes = model.input.name.split(':')[0]
-    output_nodes = model.output.name.split(':')[0]
-
+    input_nodes = ','.join([out.op.name for out in model.inputs])
+    output_nodes = ','.join([out.op.name for out in model.outputs])
     print('Model: {}'.format(model.name))
     print('  Input node name: {}'.format(input_nodes))
     print('  Output node name: {}'.format(output_nodes))
 
-    with tempfile.TemporaryDirectory() as tempdir:
-        # Convert to checkpoint
-        estimator_model = tf.keras.estimator.model_to_estimator(keras_model=model, model_dir=tempdir)
+    # Generate checkpoint via saver model
+    #  Conversion via estimator decreases model accuracy??
+    saver = tf.train.Saver()
 
-        # THen freeze the checkpoint file
-        ckpt = os.path.join(tempdir, 'keras', 'keras_model.ckpt')
+    tf_session = tf.keras.backend.get_session()
+
+    with tempfile.TemporaryDirectory() as tempdir:
+        ckpt = os.path.join(tempdir, model.name + '.ckpt')
+        _ = saver.save(tf_session, ckpt)
+
         _ = freeze_graph.freeze_graph(
             None, None, True, ckpt,
-            output_nodes, None, None, model.name+'_frozen.pb', True, None, input_meta_graph=ckpt+'.meta')
+            output_nodes, None, None, model.name + '_frozen.pb', True, None, input_meta_graph=ckpt + '.meta')
 
 
 if __name__ == '__main__':
