@@ -1,6 +1,6 @@
 # MNIST LeNet
 
-## Performance (after quantization)
+## Model Performance
 
 | Model     | Phase | Accuracy [%] |
 |:---------:|:-----:|-------------:|

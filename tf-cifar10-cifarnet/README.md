@@ -2,7 +2,7 @@
 
 - Modifiled to replace LRN with BatchNorm
 
-## Performance (after quantization)
+## Model Performance
 
 | Model     | Phase | Accuracy [%] |
 |:---------:|:-----:|-------------:|

@@ -1,6 +1,6 @@
 # CIFAR-10 ResNet
 
-## Performance (after quantization)
+## Model Performance
 
 | Model     | Phase | Accuracy [%] |
 |:---------:|:-----:|-------------:|
