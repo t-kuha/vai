@@ -1,5 +1,7 @@
 # CifarNet
 
+- Based on [TensorFLow models](models/research/slim/)
+
 - Modifiled to replace LRN with BatchNorm
 
 ## Model Performance
