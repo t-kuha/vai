@@ -1,5 +1,7 @@
 # CIFAR-10 ResNet
 
+- Based on [TensorFlow models (v1.13.0)](https://github.com/tensorflow/models/tree/57e075203f8fba8d85e6b74f17f63d0a07da233a/official/resnet/keras)
+
 ## Model Performance
 
 | Model     | Phase | Accuracy [%] |
