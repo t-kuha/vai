@@ -1,77 +1,105 @@
+# Evaluate MobileNet V2 based model on Cityscapes Validation set
+
 import os
+import glob
+import argparse
 import numpy as np
 import tensorflow as tf
 from PIL import Image
-from matplotlib import pyplot
 
-colormap = np.zeros((256, 3), dtype=np.uint8)
-colormap[0] = [128, 64, 128]
-colormap[1] = [244, 35, 232]
-colormap[2] = [70, 70, 70]
-colormap[3] = [102, 102, 156]
-colormap[4] = [190, 153, 153]
-colormap[5] = [153, 153, 153]
-colormap[6] = [250, 170, 30]
-colormap[7] = [220, 220, 0]
-colormap[8] = [107, 142, 35]
-colormap[9] = [152, 251, 152]
-colormap[10] = [70, 130, 180]
-colormap[11] = [220, 20, 60]
-colormap[12] = [255, 0, 0]
-colormap[13] = [0, 0, 142]
-colormap[14] = [0, 0, 70]
-colormap[15] = [0, 60, 100]
-colormap[16] = [0, 80, 100]
-colormap[17] = [0, 0, 230]
-colormap[18] = [119, 11, 32]
 
-img_path = '/Users/kuriharat/Documents/neuralnet/dataset/cityscapes/leftImg8bit_trainvaltest/leftImg8bit/train/jena/jena_000000_000019_leftImg8bit.png'
-# os.path.join('..', '_dataset', 'cityscapes', 'leftImg8bit', 'train', 'jena', 'jena_000000_000019_leftImg8bit.png')
+parser = argparse.ArgumentParser()
+parser.add_argument(
+    '--dataset_type', type=str,
+    default='val',
+    help='Dataset type ("train", "val", "test")')
+parser.add_argument(
+    '--dataset_dir', type=str,
+    default=os.getcwd(),
+    help='Directory containing Cityscapes dataset')
+parser.add_argument(
+    '--model_path', type=str,
+    default=os.path.join('deeplabv3_mnv2_cityscapes_train', 'frozen_inference_graph.pb'),
+    help='TensorFlow frozen mode file (*.pb)')
 
-model_path = os.path.join('deeplabv3_mnv2_cityscapes_train', 'frozen_inference_graph.pb')
 
-if not os.path.exists(img_path):
-    print('Input image cannot be found...')
+def main(FLAGS):
+    dataset_type = FLAGS.dataset_type
+    dataset_dir = FLAGS.dataset_dir
+    model_path = FLAGS.model_path
 
-if not os.path.exists(model_path):
-    print('Model file cannot be found...')
+    # Dataset directory
+    img_dir_top = os.path.join(dataset_dir, 'leftImg8bit', dataset_type)
+    if not os.path.exists(img_dir_top):
+        print('Input image cannot be found...')
+        return
+    img_dir_list = glob.glob(os.path.join(img_dir_top, '*'))
 
-# Load image
-image = Image.open(img_path)
-image = image.convert('RGB')
-input_image = np.expand_dims(np.asarray(image), 0)
+    # Model to evaluate
+    if not os.path.exists(model_path):
+        print('Model file cannot be found...')
+        return
 
-# Load model
-graph_def = tf.compat.v1.GraphDef()
-graph_def.ParseFromString(tf.io.gfile.GFile(model_path, "rb").read())
+    # Load model
+    graph_def = tf.compat.v1.GraphDef()
+    graph_def.ParseFromString(tf.io.gfile.GFile(model_path, "rb").read())
 
-graph = tf.Graph()
-graph.as_default()
+    graph = tf.Graph()
+    graph.as_default()
 
-tf.import_graph_def(graph_def, name="")
+    tf.import_graph_def(graph_def, name="")
 
-input_tensor = tf.compat.v1.get_default_graph().get_tensor_by_name('ImageTensor:0')
-output_tensor = tf.compat.v1.get_default_graph().get_tensor_by_name('SemanticPredictions:0')
-# SemanticPredictions sub_7
+    input_tensor = tf.compat.v1.get_default_graph().get_tensor_by_name('ImageTensor:0')
+    output_tensor = tf.compat.v1.get_default_graph().get_tensor_by_name('SemanticPredictions:0')
 
-# Run inference
-with tf.compat.v1.Session() as sess:
-    # for i in range(0, iter):
-    feed_dict = {input_tensor: input_image}
-    output = sess.run([output_tensor], feed_dict)
+    ytrueT = tf.compat.v1.placeholder(tf.uint8, shape=[1024, 2048])
+    ypredT = tf.compat.v1.placeholder(tf.uint8, shape=[1024, 2048])
+    weights = tf.compat.v1.placeholder(tf.uint8, shape=[1024, 2048])
+    iou, conf_mat = tf.compat.v1.metrics.mean_iou(ytrueT, ypredT, num_classes=19, weights=weights)
 
-# Post-processing: convert raw output to segmentation output
-pred = output[0][0]
-print(pred.shape)
+    miou_list = []
+    with tf.compat.v1.Session() as sess:
+        sess.run(tf.compat.v1.local_variables_initializer())
 
-# Visualization
-img_map = colormap[pred]
+        for d in img_dir_list:
+            img_list = sorted(glob.glob(os.path.join(d, '*.png')))
 
-alpha = 0.4
-img_disp = np.asarray(image)*alpha + img_map*(1-alpha)
+            # Check the existence of corresponding ground truth directory
+            gt_dir = d.replace('leftImg8bit', 'gtFine')
+            if not os.path.exists(gt_dir):
+                print('Ground truth cannot be found...')
 
-pyplot.imshow(img_disp/255)
-Image.fromarray(np.uint8(img_disp/255)).save('result.jpg')
+            for img_path in img_list:
+                # print('---- {}'.format(img_path))
 
-# Accuracy
+                # Load image
+                image = Image.open(img_path)
+                image = image.convert('RGB')
+                input_image = np.expand_dims(np.asarray(image), 0)
 
+                # Run inference
+                output = sess.run([output_tensor], {input_tensor: input_image})
+
+                # Post-processing: convert raw output to segmentation output
+                pred = output[0][0]
+
+                # Load ignore label data
+                _, fname = os.path.split(img_path)
+                fname = fname.replace('leftImg8bit', 'gtFine_labelTrainIds')
+                img_label = np.asarray(Image.open(os.path.join(gt_dir, fname)))
+                img_weights = np.not_equal(img_label, 255).astype(np.float32)
+
+                img_ids = img_label.copy()
+                img_ids[img_label == 255] = 0
+
+                # Must run conf_mat
+                sess.run([conf_mat], feed_dict={ytrueT: img_ids, ypredT: pred, weights: img_weights})
+                miou = sess.run([iou], feed_dict={ytrueT: img_ids, ypredT: pred, weights: img_weights})
+                miou_list.append(miou)
+                # print(miou)
+
+    print('---- Mean IOU: {}'.format(np.mean(miou_list)))
+
+if __name__ == "__main__":
+    FLAGS, unparsed = parser.parse_known_args()
+    main(FLAGS)
