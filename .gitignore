@@ -2,7 +2,7 @@
 
 .vscode
 .idea
-.lnk
+*.lnk
 
 _*
 
