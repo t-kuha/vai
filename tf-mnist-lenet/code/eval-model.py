@@ -10,7 +10,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument(
     '--model_path', type=str,
     default=os.path.join('quantized', 'quantize_eval_model.pb'),
-    help='TensorFlow frozem mode file (*.pb)')
+    help='TensorFlow frozen mode file (*.pb)')
 
 
 def main(model_path):
