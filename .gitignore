@@ -8,5 +8,4 @@ _*
 
 *.zip
 *.tar.*
-*tgz
-
+*.tgz
