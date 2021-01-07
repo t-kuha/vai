@@ -1,15 +1,23 @@
-# vai
+# vai: Vitis AI models
 
-- Make sure to create Vitis AI-enabled platform
+- Make sure to create Vitis AI-enabled platform & build DPU-TRD
 
-## Preparation
+***
+
+## Preparation for Vitis AI v1.3
+
+- Copy ``arch.json`` in ``sd_card`` directory of DPU-TRD as ``arch/<platform name>.json``
+
+***
+
+## Preparation for Vitis AI v1.2 and before
 
 ### Generate .dcf file
 
 ```
 $ dlet -f <input .hwh file>
-$ mkdir arch/<board name>
-$ mv <generated file> arch/<board name>/<board name>.dcf
+$ mkdir arch/<platform name>
+$ mv <generated file> arch/<platform name>/<platform name>.dcf
 ```
 
 - For example:
@@ -34,8 +42,8 @@ $ mv dpu-03-26-2020-13-30.dcf arch/ultra96v2/ultra96v2.dcf
 }
 ```
 
-- Copy edited ``arch.json`` into ``arch/<board name>``
+- Copy edited ``arch.json`` into ``arch/<platform name>``
 
 ```
-$ mv arch/arch.json arch/<board name>
+$ mv arch/arch.json arch/<platform name>
 ```
