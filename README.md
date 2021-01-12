@@ -1,6 +1,6 @@
 # vai: Vitis AI models
 
-- Make sure to create Vitis AI-enabled platform & build DPU-TRD
+- Make sure to create Vitis AI-enabled platform & build [DPU-TRD](https://github.com/Xilinx/Vitis-AI/tree/master/dsa/DPU-TRD)
 
 ***
 
@@ -14,7 +14,7 @@
 
 ### Generate .dcf file
 
-```
+```shell-session
 $ dlet -f <input .hwh file>
 $ mkdir arch/<platform name>
 $ mv <generated file> arch/<platform name>/<platform name>.dcf
@@ -22,7 +22,7 @@ $ mv <generated file> arch/<platform name>/<platform name>.dcf
 
 - For example:
 
-```
+```shell-session
 $ dlet -f ultra96v2.hwh
 $ mkdir arch/ultra96v2
 $ mv dpu-03-26-2020-13-30.dcf arch/ultra96v2/ultra96v2.dcf
@@ -44,6 +44,6 @@ $ mv dpu-03-26-2020-13-30.dcf arch/ultra96v2/ultra96v2.dcf
 
 - Copy edited ``arch.json`` into ``arch/<platform name>``
 
-```
+```shell-session
 $ mv arch/arch.json arch/<platform name>
 ```
