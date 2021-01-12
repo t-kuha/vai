@@ -1,6 +1,6 @@
 # CifarNet
 
-- Based on [TensorFLow models](models/research/slim/)
+- Based on [TensorFlow models (v1.13.0)](https://github.com/tensorflow/models/tree/r1.13.0/research/slim)
 
 - Modifiled to replace LRN with BatchNorm
 
