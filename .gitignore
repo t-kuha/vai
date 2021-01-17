@@ -9,3 +9,5 @@ _*
 *.zip
 *.tar.*
 *.tgz
+
+a.out
