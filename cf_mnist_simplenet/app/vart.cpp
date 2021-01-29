@@ -231,7 +231,7 @@ uint8_t argmax(const std::unique_ptr<int8_t []>& data)
     uint8_t idx = 0;
     int8_t val = data.get()[0];
     for(uint8_t i = 1; i < 10; i++){
-        if(data.get()[i] > val){
+        if(data.get()[i] >= val){
             idx = i;
             val = data.get()[i];
         }
