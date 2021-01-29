@@ -2,6 +2,8 @@
 
 - Based on [this repository](https://github.com/Coderx7/SimpleNet.git)
 
+- This model may not work on Zynq-7000 device
+
 ## Model Performance
 
 | Model     | Phase | Accuracy [%] |
