@@ -1,6 +1,6 @@
 # vai: Vitis AI models
 
-- Make sure to create Vitis AI-enabled platform & build [DPU-TRD](https://github.com/Xilinx/Vitis-AI/tree/master/dsa/DPU-TRD)
+- Make sure to create Vitis AI-enabled platform & build a [Reference Design](https://github.com/Xilinx/Vitis-AI/tree/master/dpu)
 
 ***
 
