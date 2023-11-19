@@ -1,13 +1,17 @@
-.DS_Store
-
-.vscode
-.idea
-*.lnk
-
+# temp.
 _*
 
+# cache
+.DS_Store
+
+
+# donwloaded data
 *.zip
 *.tar.*
 *.tgz
 
+# output
 a.out
+
+# DPU config files
+arch/*.json
