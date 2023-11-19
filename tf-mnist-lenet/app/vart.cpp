@@ -224,7 +224,7 @@ int load_mnist(
 
     if(numl != numi){
         // Check number of items
-        std::cerr << "[ERROR] Bad magic number (image)..." << std::endl;
+        std::cerr << "[ERROR] Invalid number of image..." << std::endl;
         return -1;
     }
 
