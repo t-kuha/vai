@@ -4,6 +4,8 @@ _*
 # cache
 .DS_Store
 
+# Python
+.ipynb_checkpoints
 
 # donwloaded data
 *.zip
