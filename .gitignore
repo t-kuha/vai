@@ -7,7 +7,7 @@ _*
 # Python
 .ipynb_checkpoints
 
-# donwloaded data
+# downloaded data
 *.zip
 *.tar.*
 *.tgz
