@@ -15,12 +15,12 @@
 
 - In the examples below, deploy model will be generated in ``_deploy``
 
-### Vitis-AI v1.3
+### Vitis-AI v1.3 and above
 
 ```shell-session
 $ vai_c_tensorflow \
 -f quantized/quantize_eval_model.pb \
--a ../arch/arch.json -o _deploy -n lenet
+-a ../arch/<arch.json> -o _deploy -n lenet
 ```
 
 - Output:
