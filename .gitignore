@@ -6,6 +6,7 @@ _*
 
 # Python
 .ipynb_checkpoints
+.ruff_cache
 
 # downloaded data
 *.zip
