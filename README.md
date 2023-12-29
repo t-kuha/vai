@@ -12,6 +12,9 @@
 
 ## Preparation for Vitis AI v1.2 and before
 
+<details>
+  <summary>click here</summary>
+
 ### Generate .dcf file
 
 ```shell-session
@@ -47,3 +50,4 @@ $ mv dpu-03-26-2020-13-30.dcf arch/ultra96v2/ultra96v2.dcf
 ```shell-session
 $ mv arch/arch.json arch/<platform name>
 ```
+</details>
