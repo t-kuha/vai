@@ -8,6 +8,15 @@
 
 - Copy ``arch.json`` in ``sd_card`` directory of DPU-TRD as ``arch/<platform name>.json``
 
+## KV260
+
+```shell
+# make sure "dpu" is listed as accelerator
+$ sudo xmutil listapps
+$ sudo xmutil unloadapp
+$ sudo xmutil loadapp dpu
+```
+
 ***
 
 ## Preparation for Vitis AI v1.2 and before
