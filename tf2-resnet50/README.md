@@ -1,8 +1,13 @@
-# TF2 ResNet50: deploy quantized model
+# TF2 ResNet50: deploying quantized model from AMD/Xilinx
 
-- download TF2 ResNet50 model from Vitis AI model zoo
+- download TF2 ResNet50 model from Vitis AI model zoo:
 
-- deploy
+```shell
+$ wget https://www.xilinx.com/bin/public/openDownload?filename=tf2_resnet50_3.5.zip
+```
+
+- generate .xmodel:
+  - output: ``deploy.xmodel``
 
 ```shell
 $ unzip tf2_resnet50_3.5.zip
