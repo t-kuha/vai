@@ -50,7 +50,6 @@ if __name__ == '__main__':
     if quant_mode == 'calib':
         input = torch.randn([1, 3, 32, 32])
         quantizer = torch_quantizer(quant_mode, model, (input), device=torch.device(device))
-        # quant_model = quantizer.quant_model
         quantizer.quant_model(input)
         quantizer.export_quant_config()
 
@@ -63,6 +62,7 @@ if __name__ == '__main__':
     # deploy .xmodel
     if quant_mode == 'deploy':
         input = torch.randn([1, 3, 32, 32])
-        quantizer = torch_quantizer('test', model, (input), device=torch.device(device), target='DPUCZDX8G_ISA1_B1600')
+        quantizer = torch_quantizer('test', model, (input), device=torch.device(device))
         quantizer.quant_model(input)
         quantizer.export_xmodel(deploy_check=True)
+        # at this point, .xmodel will be generated as quantize_result/VGG_int.xmodel
