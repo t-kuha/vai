@@ -1,0 +1,6 @@
+{
+    "files.exclude": {
+        ".dataset": true,
+        ".ruff_cache": true
+    }
+}
