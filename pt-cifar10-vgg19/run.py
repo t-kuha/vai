@@ -34,7 +34,7 @@ if __name__ == '__main__':
     ])
     testset = torchvision.datasets.CIFAR10(
         root=os.path.join('..', '.dataset'), train=False, download=True, transform=transform_test)
-    testloader = torch.utils.data.DataLoader(testset, batch_size=100, shuffle=False)
+    testloader = torch.utils.data.DataLoader(testset, batch_size=256, shuffle=False)
 
     # inference of float model
     if quant_mode == 'float':
@@ -48,7 +48,7 @@ if __name__ == '__main__':
 
     # quantization
     if quant_mode == 'calib':
-        input = torch.randn([1, 3, 32, 32])
+        input = torch.stack([testset[i][0] for i in range(0, len(testset), 100)])
         quantizer = torch_quantizer(quant_mode, model, (input), device=torch.device(device))
         quantizer.quant_model(input)
         quantizer.export_quant_config()
