@@ -7,7 +7,7 @@
 | config    | accuracy [%] |
 |:---------:|-------------:|
 | float     |        93.84 |
-| quantized |        93.75 |
+| quantized |        93.82 |
 
 ## how to deploy model
 
@@ -34,5 +34,5 @@ $ python run.py calib
 
 ```shell
 $ python run.py deploy
-$ xcompiler -i quantize_result/VGG_int.xmodel -o test.xmodel -f <DPU config finger print value>
+$ xcompiler -i quantize_result/VGG_int.xmodel -o vgg19.xmodel -f <DPU config finger print value>
 ```
