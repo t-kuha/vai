@@ -7,7 +7,7 @@
 | config    | accuracy [%] |
 |:---------:|-------------:|
 | float     |        70.38 |
-| quantized |        TODO  |
+| quantized |        69.39 |
 
 ## how to deploy model
 
