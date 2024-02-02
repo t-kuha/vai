@@ -38,12 +38,13 @@ if __name__ == '__main__':
 
     # quantization
     if quant_mode == 'calib':
-        input = torch.randn([1, 3, 224, 224])
+        # create batch for calibration
+        input = torch.stack([testset[i][0] for i in range(0, len(testset), 1000)])
         quantizer = torch_quantizer(quant_mode, model, (input), device=torch.device(device))
         quantizer.quant_model(input)
         quantizer.export_quant_config()
 
-        calibloader = torch.utils.data.DataLoader(testset, batch_size=256, shuffle=False)
+        calibloader = torch.utils.data.DataLoader(testset, batch_size=128, shuffle=False)
         num_correct = 0
         for inputs, targets in tqdm.tqdm(calibloader):
             outputs = quantizer.quant_model(inputs.to(device))
