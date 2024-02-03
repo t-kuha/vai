@@ -1,43 +1,24 @@
 #!/usr/bin/env python
-# coding: utf-8
-
-# # inference - ImageNet
-
-# ***
-# 
-# ## imports
-
-# In[8]:
-
-
 import os
 
+import numpy as np
 import torch
 import torchvision
 import tqdm
 import vart
 import xir
 
-import numpy as np
-
-
-# ***
-# 
-# ## functions
-
-# In[2]:
-
 
 def get_child_subgraph_dpu(graph: xir.Graph) -> list[xir.Subgraph]:
     """obtain dpu subgrah.
     """
     assert graph, '"graph" should not be None.'
-    
+
     root_subgraph = graph.get_root_subgraph()
     assert root_subgraph, 'Failed to get root subgraph of input Graph object.'
     if root_subgraph.is_leaf:
         return []
-    
+
     child_subgraphs = root_subgraph.toposort_child_subgraph()
     assert child_subgraphs
     return [
@@ -46,19 +27,8 @@ def get_child_subgraph_dpu(graph: xir.Graph) -> list[xir.Subgraph]:
     ]
 
 
-# ***
-# 
-# ## setting
-
-# In[3]:
-
-
 xmodel_path = 'vgg11_bn.xmodel'
 assert os.path.exists(xmodel_path)
-
-
-# In[5]:
-
 
 # dataloader & transoform info
 transform_test = torchvision.models.vgg.VGG11_Weights.IMAGENET1K_V1.transforms()
@@ -67,10 +37,6 @@ testset = torchvision.datasets.ImageNet(
 )
 
 testloader = torch.utils.data.DataLoader(testset, batch_size=1, shuffle=False)
-
-
-# In[6]:
-
 
 g = xir.Graph.deserialize(xmodel_path)
 subgraphs = get_child_subgraph_dpu(g)
@@ -93,14 +59,10 @@ output_scale = 1 / (2**output_fixpos)
 inputData = [np.empty(input_ndim, dtype=np.int8, order='C')]
 outputData = [np.empty(output_ndim, dtype=np.int8, order='C')]
 
-
-# In[ ]:
-
-
 num_correct = 0
 for i, (inputs, targets) in tqdm.tqdm(enumerate(testloader)):
     inputData[0] = (inputs * input_scale).to(torch.int8, memory_format=torch.channels_last).numpy()
-    
+
     # run
     job_id = dpu_runner.execute_async(inputData, outputData)
     dpu_runner.wait(job_id)
@@ -110,22 +72,3 @@ for i, (inputs, targets) in tqdm.tqdm(enumerate(testloader)):
         print(num_correct * 100. / i)
 
 print(f'accuracy: {num_correct * 100 / (len(testset))} %')
-
-
-# In[ ]:
-
-
-
-
-
-# In[5]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
