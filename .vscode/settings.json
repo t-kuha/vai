@@ -1,6 +1,7 @@
 {
     "files.exclude": {
         ".dataset": true,
-        ".ruff_cache": true
+        ".ruff_cache": true,
+        "**/.ipynb_checkpoints": true
     }
 }
