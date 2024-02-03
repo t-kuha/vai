@@ -49,7 +49,7 @@ if __name__ == '__main__':
         for inputs, targets in tqdm.tqdm(calibloader):
             outputs = quantizer.quant_model(inputs.to(device))
             num_correct += torch.sum(torch.argmax(outputs, 1) == targets.to(device))
-        print(f'accuracy: {num_correct.item() * 100 / 50000} %')
+        print(f'accuracy: {num_correct.item() * 100 / len(testset)} %')
 
     # deploy .xmodel
     if quant_mode == 'deploy':

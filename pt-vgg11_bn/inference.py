@@ -9,9 +9,12 @@ import vart
 import xir
 
 
-def get_child_subgraph_dpu(graph: xir.Graph) -> list[xir.Subgraph]:
+def get_child_subgraph_dpu(xmodel_path: str) -> list[xir.Subgraph]:
     """obtain dpu subgrah.
     """
+    assert os.path.exists(xmodel_path)
+
+    graph = xir.Graph.deserialize(xmodel_path)
     assert graph, '"graph" should not be None.'
 
     root_subgraph = graph.get_root_subgraph()
@@ -27,19 +30,17 @@ def get_child_subgraph_dpu(graph: xir.Graph) -> list[xir.Subgraph]:
     ]
 
 
-xmodel_path = 'vgg11_bn.xmodel'
-assert os.path.exists(xmodel_path)
+XMODEL_PATH = 'vgg11_bn.xmodel'
 
 # dataloader & transoform info
 transform_test = torchvision.models.vgg.VGG11_Weights.IMAGENET1K_V1.transforms()
 testset = torchvision.datasets.ImageNet(
     root='.', split='val', transform=transform_test
 )
-
 testloader = torch.utils.data.DataLoader(testset, batch_size=1, shuffle=False)
 
-g = xir.Graph.deserialize(xmodel_path)
-subgraphs = get_child_subgraph_dpu(g)
+# load .xmodel
+subgraphs = get_child_subgraph_dpu(XMODEL_PATH)
 assert len(subgraphs) == 1  # only one DPU kernel
 
 dpu_runner = vart.Runner.create_runner(subgraphs[0], 'run')
@@ -60,7 +61,7 @@ inputData = [np.empty(input_ndim, dtype=np.int8, order='C')]
 outputData = [np.empty(output_ndim, dtype=np.int8, order='C')]
 
 num_correct = 0
-for i, (inputs, targets) in tqdm.tqdm(enumerate(testloader)):
+for i, (inputs, targets) in enumerate(tqdm.tqdm(testloader)):
     inputData[0] = (inputs * input_scale).to(torch.int8, memory_format=torch.channels_last).numpy()
 
     # run
