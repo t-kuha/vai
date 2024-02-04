@@ -24,10 +24,11 @@ if __name__ == '__main__':
         aux_logits=False,   # do not output aux
         init_weights=False  # avoid FutureWarning
     )
-    transform_test = torchvision.models.GoogLeNet_Weights.IMAGENET1K_V1.transforms()
     testset = torchvision.datasets.ImageNet(
         root=os.path.join('..', '.dataset', 'imagenet'),
-        split='val', transform=transform_test)
+        split='val',
+        transform=torchvision.models.GoogLeNet_Weights.IMAGENET1K_V1.transforms()
+    )
 
     state_dict = torch.load('googlenet-1378be20.pth')
     weight_to_remove = [
@@ -57,11 +58,11 @@ if __name__ == '__main__':
 
     model.load_state_dict(state_dict)
     model.eval()
-
+    model.to(device)
+    
     # inference of float model
     if quant_mode == 'float':
         testloader = torch.utils.data.DataLoader(testset, batch_size=32, shuffle=False)
-        model.eval()
         num_correct = 0
         with torch.no_grad():
             for inputs, targets in tqdm.tqdm(testloader):
