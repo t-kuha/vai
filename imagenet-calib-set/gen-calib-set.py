@@ -14,7 +14,7 @@ LABEL_TO_SYNSET_MAP_FILE = 'imagenet_label_to_wordnet_synset.txt'  # (above link
 
 
 def main(src_dir: str, dst_dir: str) -> None:
-    """
+    """main function.
     """
     with open(LABEL_TO_SYNSET_MAP_FILE, 'r') as f:
         labels_synset_json = f.read().replace('\n', ' ')
@@ -33,8 +33,7 @@ def main(src_dir: str, dst_dir: str) -> None:
         src_path = os.path.join(src_dir, f'ILSVRC2012_val_{i:08d}.JPEG')
         dst_dir2 = os.path.join(dst_dir, f'{cls}')
         dst_path = os.path.join(dst_dir2, f'ILSVRC2012_val_{i:08d}.JPEG')
-        if not os.path.exists(dst_dir2):
-            os.makedirs(dst_dir2)
+        os.makedirs(dst_dir2, exist_ok=True)
         shutil.copyfile(src_path, dst_path)
 
 
