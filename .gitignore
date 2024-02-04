@@ -12,10 +12,19 @@ _*
 *.zip
 *.tar.*
 *.tgz
+*.pt
+*.pth
 
 # output
+*/quantize_result
+*/md5sum.txt
+*/meta.json
 *.xmodel
 a.out
 
 # DPU config files
 arch/*.json
+
+# dataset
+.dataset
+
