@@ -12,10 +12,14 @@ if __name__ == '__main__':
     """main processing.
     """
     parser = argparse.ArgumentParser()
-    parser.add_argument('mode', type=str, choices=['float', 'calib', 'deploy'], help='process mode')
+    parser.add_argument(
+        'mode', type=str,
+        choices=['float', 'calib', 'deploy'], help='process mode'
+    )
     parser.add_argument(
         '-d', '--dataset_dir', type=str,
-        default=os.path.join('..', '.dataset', 'imagenet'), help='path to dataset (ImageNet validation) directory'
+        default=os.path.join('..', 'dataset', 'imagenet'),
+        help='path to dataset (ImageNet validation) directory'
     )
     args = parser.parse_args()
 
@@ -32,31 +36,6 @@ if __name__ == '__main__':
         split='val',
         transform=torchvision.models.GoogLeNet_Weights.IMAGENET1K_V1.transforms()
     )
-    
-    # weight_to_remove = [
-    #     'aux1.conv.conv.weight',
-    #     'aux1.conv.bn.weight',
-    #     'aux1.conv.bn.bias',
-    #     'aux1.conv.bn.running_mean',
-    #     'aux1.conv.bn.running_var',
-    #     'aux1.conv.bn.num_batches_tracked', 
-    #     'aux1.fc1.weight',
-    #     'aux1.fc1.bias',
-    #     'aux1.fc2.weight',
-    #     'aux1.fc2.bias',
-    #     'aux2.conv.conv.weight',
-    #     'aux2.conv.bn.weight',
-    #     'aux2.conv.bn.bias',
-    #     'aux2.conv.bn.running_mean',
-    #     'aux2.conv.bn.running_var',
-    #     'aux2.conv.bn.num_batches_tracked',
-    #     'aux2.fc1.weight',
-    #     'aux2.fc1.bias',
-    #     'aux2.fc2.weight',
-    #     'aux2.fc2.bias'
-    # ]
-    # for k in weight_to_remove:
-    #     del state_dict[k]
 
     model.to(device)
     model.eval()
@@ -83,12 +62,13 @@ if __name__ == '__main__':
 
         calibloader = torch.utils.data.DataLoader(testset, batch_size=16, shuffle=False)
         num_correct = 0
+        SKIP = 100
         for i, (inputs, targets) in enumerate(tqdm.tqdm(calibloader)):
+            if i % SKIP != 0:
+                continue
             outputs = quantizer.quant_model(inputs.to(device))
             num_correct += torch.sum(torch.argmax(outputs, 1) == targets.to(device))
-            # if (i > 0) and (i % 5 == 0):
-            #     print(num_correct * 100. / ((i + 1) * 16))
-        print(f'accuracy: {num_correct.item() * 100 / len(testset)} %')
+        print(f'accuracy: {num_correct.item() * 100 / len(testset) / SKIP} %')
 
     # deploy .xmodel
     if quant_mode == 'deploy':
