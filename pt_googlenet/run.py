@@ -26,7 +26,7 @@ if __name__ == '__main__':
     assert os.path.exists(args.dataset_dir), f'{args.dataset_dir = :}'
 
     quant_mode = args.mode
-    device = 'cuda' if torch.cuda.is_available() else 'mps' if torch.backends.mps.is_available() else ('cpu')
+    device = 'cuda' if torch.cuda.is_available() else 'mps' if torch.backends.mps.is_available() else 'cpu'
     
     model = torchvision.models.googlenet(
         weights=torchvision.models.GoogLeNet_Weights.IMAGENET1K_V1
@@ -68,7 +68,7 @@ if __name__ == '__main__':
                 continue
             outputs = quantizer.quant_model(inputs.to(device))
             num_correct += torch.sum(torch.argmax(outputs, 1) == targets.to(device))
-        print(f'accuracy: {num_correct.item() * 100 / len(testset) / SKIP} %')
+        print(f'accuracy: {num_correct.item() * 100 / len(testset) * SKIP} %')
 
     # deploy .xmodel
     if quant_mode == 'deploy':
