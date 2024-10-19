@@ -12,13 +12,13 @@
 # deployment
 
 ```shell-session
-$ xcompiler -i quantized/ResNet_0_int.xmodel -o resnet50.xmodel -f <DPU config finger print value>
+$ xcompiler -i <unzipped folder>/quantized/ResNet_0_int.xmodel -o resnet50.xmodel -f <DPU config finger print value>
 ```
 
 - Example output
 
 ```shell-session
-$ xcompiler -i quantized/ResNet_0_int.xmodel -o resnet50.xmodel -f 0x101000016010405
+$ xcompiler -i pt_resnet50_0.5_3.5/quantized/ResNet_0_int.xmodel -o resnet50.xmodel -f 0x101000016010405
 [UNILOG][INFO] Compile mode: dpu
 [UNILOG][INFO] Debug mode: null
 [UNILOG][INFO] Target architecture: DPUCZDX8G_ISA1_B2304_0101000016010405
@@ -26,7 +26,7 @@ $ xcompiler -i quantized/ResNet_0_int.xmodel -o resnet50.xmodel -f 0x10100001601
 [UNILOG][INFO] Begin to compile...
 [UNILOG][INFO] Total device subgraph number 3, DPU subgraph number 1
 [UNILOG][INFO] Compile done.
-[UNILOG][INFO] The meta json is saved to "/home/imagingtechnerd/work/vai/pt_resnet50_0.5/pt_resnet50_0.5_3.5/meta.json"
-[UNILOG][INFO] The compiled xmodel is saved to "/home/imagingtechnerd/work/vai/pt_resnet50_0.5/pt_resnet50_0.5_3.5/resnet50.xmodel"
-[UNILOG][INFO] The compiled xmodel's md5sum is ded16e008c65a399983a906d457c3ba2, and has been saved to "/home/imagingtechnerd/work/vai/pt_resnet50_0.5/pt_resnet50_0.5_3.5/md5sum.txt"
+[UNILOG][INFO] The meta json is saved to "/home/imagingtechnerd/work/vai/pt_resnet50/meta.json"
+[UNILOG][INFO] The compiled xmodel is saved to "/home/imagingtechnerd/work/vai/pt_resnet50/resnet50.xmodel"
+[UNILOG][INFO] The compiled xmodel's md5sum is 87220a1cf2e4018b8ff846fb3a7496dd, and has been saved to "/home/imagingtechnerd/work/vai/pt_resnet50/md5sum.txt"
 ```
