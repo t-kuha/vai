@@ -14,16 +14,20 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument(
         'mode', type=str,
-        choices=['float', 'calib', 'deploy'], help='process mode'
+        choices=['float', 'inspect', 'calib', 'deploy'], help='process mode'
     )
     parser.add_argument(
         '-d', '--dataset_dir', type=str,
         default=os.path.join('..', 'dataset', 'imagenet'),
         help='path to dataset (ImageNet validation) directory'
     )
+    parser.add_argument(
+        '-f', '--fingerprint', type=str,
+        default='0x101000016010405',
+        help='DPU name or fingerprint value'
+    )
     args = parser.parse_args()
 
-    assert os.path.exists(args.dataset_dir), f'{args.dataset_dir = :}'
 
     quant_mode = args.mode
     device = 'cuda' if torch.cuda.is_available() else 'mps' if torch.backends.mps.is_available() else 'cpu'
@@ -31,11 +35,13 @@ if __name__ == '__main__':
     model = torchvision.models.googlenet(
         weights=torchvision.models.GoogLeNet_Weights.IMAGENET1K_V1
     )
-    testset = torchvision.datasets.ImageNet(
-        root=args.dataset_dir,
-        split='val',
-        transform=torchvision.models.GoogLeNet_Weights.IMAGENET1K_V1.transforms()
-    )
+    if quant_mode != 'inspect':
+        assert os.path.exists(args.dataset_dir), f'{args.dataset_dir = :}'
+        testset = torchvision.datasets.ImageNet(
+            root=args.dataset_dir,
+            split='val',
+            transform=torchvision.models.GoogLeNet_Weights.IMAGENET1K_V1.transforms()
+        )
 
     model.to(device)
     model.eval()
@@ -49,6 +55,12 @@ if __name__ == '__main__':
                 outputs = model(inputs.to(device))
                 num_correct += torch.sum(torch.argmax(outputs, 1) == targets.to(device))
         print(f'accuracy: {num_correct.item() * 100 / len(testset)} %')
+
+    # inspect model
+    if quant_mode == 'inspect':
+        from pytorch_nndct.apis import Inspector
+        inspector = Inspector(args.fingerprint)
+        inspector.inspect(model, torch.randn([1, 3, 224, 224]), torch.device(device))
 
     # quantization
     if quant_mode == 'calib':
