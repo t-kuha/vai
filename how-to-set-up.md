@@ -29,7 +29,7 @@ $ export VAI_CONDA_CHANNEL="file://$(pwd)/conda-channel"
 $ conda config --env --append channels ${VAI_CONDA_CHANNEL}
 ```
 
-- Donwload Vitis-AI repo
+- Download Vitis-AI repo
 
 ```shell
 $ git clone https://github.com/Xilinx/Vitis-AI.git
@@ -45,7 +45,7 @@ $ conda activate vai-pt
 
 # install necessary packages
 $ conda install python=3.8.18  # 3.8.18 only?
-$ conda install numpy=1.24.2 tqdm pyyaml cmake ninja
+$ conda install numpy==1.24.2 tqdm pyyaml cmake ninja
 $ pip install torch==2.0.0+cpu torchvision==0.15.1+cpu --index-url https://download.pytorch.org/whl/cpu
 # glog: v0.6.0 is necessary for xcompiler
 $ conda install -c conda-forge glog=0.6
