@@ -69,4 +69,4 @@ for inputs, targets in tqdm.tqdm(testloader):
     dpu_runner.wait(job_id)
     num_correct += (np.argmax(outputData[0]) == targets.item())
 
-print(f'accuracy: {num_correct * 100 / (len(testset))} %')
+print(f'accuracy: {num_correct * 100 / (len(testset)):.3} %')
