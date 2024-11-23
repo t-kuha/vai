@@ -40,7 +40,7 @@ if __name__ == '__main__':
         testset = torchvision.datasets.ImageNet(
             root=args.dataset_dir,
             split='val',
-            transform=torchvision.models.GoogLeNet_Weights.IMAGENET1K_V1.transforms()
+            transform=torchvision.models.AlexNet_Weights.IMAGENET1K_V1.transforms()
         )
 
     model.to(device)
@@ -90,4 +90,4 @@ if __name__ == '__main__':
         quantizer = torch_quantizer('test', model, (input), device=torch.device(device))
         quantizer.quant_model(input)
         quantizer.export_xmodel(deploy_check=True)
-        # at this point, .xmodel will be generated as quantize_result/GoogLeNet_int.xmodel
+        # at this point, .xmodel will be generated as quantize_result/AlexNet_int.xmodel
