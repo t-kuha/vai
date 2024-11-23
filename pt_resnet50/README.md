@@ -11,7 +11,7 @@
 
 # deployment
 
-```shell-session
+```shell
 $ xcompiler -i <unzipped folder>/quantized/ResNet_0_int.xmodel -o resnet50.xmodel -f <DPU config finger print value>
 ```
 
