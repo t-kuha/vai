@@ -9,7 +9,7 @@
 | config    | accuracy [%] |
 |:---------:|-------------:|
 | float     |       69.778 |
-| quantized |       60.932 |
+| quantized |       61.200 |
 
 ## how to deploy model
 
@@ -26,16 +26,14 @@ $ xcompiler -i quantize_result/GoogLeNet_int.xmodel -o googlenet.xmodel -f <DPU 
 ```
 
 ```shell-session
-$ xcompiler -i quantize_result/GoogLeNet_int.xmodel -o googlenet.xmodel -f 0x101000016010405
-[UNILOG][WARNING] The operator named GoogLeNet__GoogLeNet_ret_19, type: nndct_select, is not defined in XIR. XIR creates the definition of this operator automatically. You should specify the shape and the data_type of the output tensor of this operation by set_attr("shape", std::vector<int>) and set_attr("data_type", std::string)
-[UNILOG][INFO] Compile mode: dpu
+$ xcompiler -i quantize_result/GoogLeNet_int.xmodel -o googlenet.xmodel -f 0x101000036010407
 [UNILOG][INFO] Debug mode: null
-[UNILOG][INFO] Target architecture: DPUCZDX8G_ISA1_B2304_0101000016010405
-[UNILOG][INFO] Graph name: GoogLeNet, with op num: 473
+[UNILOG][INFO] Target architecture: DPUCZDX8G_ISA1_B4096_0101000036010407
+[UNILOG][INFO] Graph name: GoogLeNet, with op num: 423
 [UNILOG][INFO] Begin to compile...
-[UNILOG][INFO] Total device subgraph number 6, DPU subgraph number 1
+[UNILOG][INFO] Total device subgraph number 3, DPU subgraph number 1
 [UNILOG][INFO] Compile done.
-[UNILOG][INFO] The meta json is saved to "/home/imagingtechnerd/work/vai/pt_googlenet/meta.json"
-[UNILOG][INFO] The compiled xmodel is saved to "/home/imagingtechnerd/work/vai/pt_googlenet/googlenet.xmodel"
-[UNILOG][INFO] The compiled xmodel's md5sum is 40a6ce2a62d1f5f8c3831800cc31917d, and has been saved to "/home/imagingtechnerd/work/vai/pt_googlenet/md5sum.txt"
+[UNILOG][INFO] The meta json is saved to "/home/imagingtechnerd/vai/pt_googlenet/meta.json"
+[UNILOG][INFO] The compiled xmodel is saved to "/home/imagingtechnerd/vai/pt_googlenet/googlenet.xmodel"
+[UNILOG][INFO] The compiled xmodel's md5sum is f1cef0075b4159d71afdccd824889a47, and has been saved to "/home/imagingtechnerd/vai/pt_googlenet/md5sum.txt"
 ```

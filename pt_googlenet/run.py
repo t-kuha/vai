@@ -33,7 +33,8 @@ if __name__ == '__main__':
     device = 'cuda' if torch.cuda.is_available() else 'mps' if torch.backends.mps.is_available() else 'cpu'
     
     model = torchvision.models.googlenet(
-        weights=torchvision.models.GoogLeNet_Weights.IMAGENET1K_V1
+        weights=torchvision.models.GoogLeNet_Weights.IMAGENET1K_V1,
+        transform_input=False
     )
     if quant_mode != 'inspect':
         assert os.path.exists(args.dataset_dir), f'{args.dataset_dir = :}'
@@ -67,7 +68,7 @@ if __name__ == '__main__':
         from pytorch_nndct.apis import torch_quantizer
 
         # create batch for calibration
-        input = torch.stack([testset[i][0] for i in range(0, len(testset), 1000)])
+        input = torch.stack([testset[i][0] for i in range(0, len(testset), 5000)])
         quantizer = torch_quantizer(quant_mode, model, (input), device=torch.device(device))
         quantizer.quant_model(input)
         quantizer.export_quant_config()
