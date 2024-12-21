@@ -29,7 +29,7 @@ $ xcompiler -i quantize_result/QuantizableGoogLeNet_int.xmodel -o googlenetq.xmo
 ```
 
 ```shell-session
-$ xcompiler -i quantize_result/GoogLeNet_int.xmodel -o googlenet.xmodel -f 0x101000016010405
+$ xcompiler -i quantize_result/QuantizableGoogLeNet_int.xmodel -o googlenetq.xmodel -f 0x101000036010407
 [UNILOG][INFO] Debug mode: null
 [UNILOG][INFO] Target architecture: DPUCZDX8G_ISA1_B4096_0101000036010407
 [UNILOG][INFO] Graph name: QuantizableGoogLeNet, with op num: 423
