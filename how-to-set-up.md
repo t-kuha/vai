@@ -77,6 +77,8 @@ $ pip install numpy==1.22.1
 # tensorflow along with libprotobuf 3.21.12
 $ pip install protobuf==3.20.3
 $ pip install tensorflow==2.12 keras==2.12
+# optional: TF Hub
+$ pip install tensorflow_hub==0.12.0
 
 # clean-up
 $ conda clean --all
