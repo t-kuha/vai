@@ -10,8 +10,8 @@
 - Install Miniconda
 
 ```shell
-$ wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
-$ chmod +x ./Miniconda3-latest-Linux-x86_64.sh
+$ wget https://repo.anaconda.com/miniconda/Miniconda3-py38_23.11.0-2-Linux-x86_64.sh
+$ chmod +x ./Miniconda3-py38_23.11.0-2-Linux-x86_64.sh
 $ ./Miniconda3-latest-Linux-x86_64.sh
 
 $ conda create -n vai-pt
@@ -79,6 +79,10 @@ $ pip install protobuf==3.20.3
 $ pip install tensorflow==2.12 keras==2.12
 # optional: TF Hub
 $ pip install tensorflow_hub==0.12.0
+$ conda install xcompiler xnnc
+$ conda install vai_q_tensorflow2
+$ conda install vaic
+$ conda install target_explorer tensorflow-onnx
 
 # clean-up
 $ conda clean --all
