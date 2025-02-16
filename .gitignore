@@ -1,3 +1,10 @@
 .vscode
 
+# temp
 _*
+
+# intermediate output
+quantize_result
+
+# data
+*.zip
