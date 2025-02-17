@@ -8,11 +8,19 @@ import tqdm
 import torch
 import torchvision
 
-from trained_models_cifar10.models import vgg_models
+from trained_models_cifar10.models import (
+    resnet_models, xception_cifar10, densenet_models,
+    inceptionv3_cifar10, vgg_models
+    # dpn_models, dla_models, effientNet_models, 
+)
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
+    parser.add_argument(
+        'model_name', type=str,
+        choices=['vgg19', 'resnet', 'xception', 'inceptionv3', 'densenet'], help='model name'
+    )
     parser.add_argument(
         'mode', type=str,
         choices=['float', 'inspect', 'calib', 'deploy'], help='process mode'
@@ -33,7 +41,21 @@ if __name__ == '__main__':
     device = 'cuda' if torch.cuda.is_available() else 'mps' if torch.backends.mps.is_available() else 'cpu'
     print(f'{device=:}')
 
-    model = vgg_models.VGG('VGG19')
+    if args.model_name == 'vgg19':
+        model = vgg_models.VGG('VGG19')
+        pth_path = 'trained_models_cifar10/vgg19_cifar10_lr01.pth'
+    elif args.model_name == 'resnet':
+        model = resnet_models.ResNet50()
+        pth_path = 'trained_models_cifar10/resnet50_cifar10_lr01.pth'
+    elif args.model_name == 'xception':
+        model = xception_cifar10.xception()
+        pth_path = 'trained_models_cifar10/xception_cifar10_lr01.pth'
+    elif args.model_name == 'inceptionv3':
+        model = inceptionv3_cifar10.inceptionv3()
+        pth_path = 'trained_models_cifar10/inceptionv3_cifar10_lr01.pth'
+    elif args.model_name == 'densenet':
+        model = densenet_models.DenseNet169()
+        pth_path = 'trained_models_cifar10/densenet169_cifar10_lr01.pth'
 
     if quant_mode == 'inspect':
         # inspect model
@@ -51,7 +73,7 @@ if __name__ == '__main__':
         root=args.dataset_dir, download=True, train=False, transform=normalize
     )
 
-    net_state_dict = torch.load('trained_models_cifar10/vgg19_cifar10_lr01.pth', map_location=device)['net']
+    net_state_dict = torch.load(pth_path, map_location=device)['net']
     model.load_state_dict(net_state_dict)
     model.to(device)
     model.eval()
