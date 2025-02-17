@@ -85,7 +85,6 @@ if __name__ == '__main__':
             for inputs, targets in tqdm.tqdm(testloader):
                 outputs = model(inputs.to(device))
                 num_correct += torch.sum(torch.argmax(outputs, 1) == targets.to(device))
-            print(outputs)
         print(f'accuracy: {num_correct.item() * 100 / len(testset)} %')
 
     if quant_mode == 'calib':
