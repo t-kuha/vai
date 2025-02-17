@@ -1,4 +1,4 @@
-# VGG19 for CIFAR10 based on Kaggle model 
+# CIFAR10 based on Kaggle model 
 
 - Base model: [Trained models for CIFAR-10 dataset](https://www.kaggle.com/datasets/firuzjuraev/trained-models-for-cifar10-dataset)
 
@@ -6,24 +6,30 @@
 
 - Top-1 on CPU
 
-| config    | accuracy [%] |
-|:---------:|-------------:|
-| float     |        93.18 |
-| quantized |        92.89 |
+| config    | acc. (float) [%] | acc. (qaunt.) [%] |
+|:---------:|-------------:|-------------:|
+| DensNet   |        95.10 | |
+| Inception |        94.77 | |
+| ResNet50  |        95.30 | |
+| VGG19     |        93.18 |        92.89 |
+| Xception  |        93.49 | |
 
 ## how to deploy model
 
 - Download model data (`archive.zip`) from the link above & unzip it
 
 ```shell
+# check model's compatibility with Vitis AI:
+$ python run.py <model name> inspact
+
 # test float model performance:
-$ python run.py float
+$ python run.py <model name> float
 
 # quantize model (calibration):
-$ python run.py calib
+$ python run.py <model name> calib
 
 # deployment:
-$ python run.py deploy
+$ python run.py <model name> deploy
 [UNILOG][INFO] Compile mode: dpu
 [UNILOG][INFO] Debug mode: null
 [UNILOG][INFO] Target architecture: DPUCZDX8G_ISA1_B2304_0101000016010405

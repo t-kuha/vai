@@ -44,6 +44,7 @@ if __name__ == '__main__':
     if args.model_name == 'vgg19':
         model = vgg_models.VGG('VGG19')
         pth_path = 'trained_models_cifar10/vgg19_cifar10_lr01.pth'
+        int_name = 'VGG_int.xmodel'
     elif args.model_name == 'resnet':
         model = resnet_models.ResNet50()
         pth_path = 'trained_models_cifar10/resnet50_cifar10_lr01.pth'
@@ -56,6 +57,7 @@ if __name__ == '__main__':
     elif args.model_name == 'densenet':
         model = densenet_models.DenseNet169()
         pth_path = 'trained_models_cifar10/densenet169_cifar10_lr01.pth'
+        int_name = 'DenseNet_int.xmodel'
 
     if quant_mode == 'inspect':
         # inspect model
@@ -73,7 +75,7 @@ if __name__ == '__main__':
         root=args.dataset_dir, download=True, train=False, transform=normalize
     )
 
-    net_state_dict = torch.load(pth_path, map_location=device)['net']
+    net_state_dict = torch.load(pth_path, map_location=device, weights_only=True)['net']
     model.load_state_dict(net_state_dict)
     model.to(device)
     model.eval()
@@ -118,7 +120,7 @@ if __name__ == '__main__':
 
         subprocess.run([
             'xcompiler',
-            '-i', 'quantize_result/VGG_int.xmodel',
-            '-o', 'vgg19_cifar10.xmodel',
+            '-i', f'quantize_result/{int_name}',
+            '-o', f'{args.model_name}_cifar10.xmodel',
             '-f', {args.fingerprint}
         ])
