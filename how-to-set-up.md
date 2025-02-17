@@ -45,7 +45,7 @@ $ conda activate vai-pt
 
 # install necessary packages
 $ conda install python=3.8.18  # 3.8.18 only?
-$ conda install numpy==1.24.2 tqdm pyyaml cmake ninja tabulate
+$ conda install tqdm pyyaml cmake ninja tabulate
 $ pip install torch==2.0.0+cpu torchvision==0.15.1+cpu --index-url https://download.pytorch.org/whl/cpu
 # glog: v0.6.0 is necessary for xcompiler
 $ conda install -c conda-forge glog=0.6
