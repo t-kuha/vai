@@ -3,8 +3,14 @@
 # temp
 _*
 
-# intermediate output
+# Vitis-AI output
 quantize_result
+*.xmodel
+meta.json
+md5sum.txt
 
 # data
 *.zip
+*.tar
+*.tar.*
+
