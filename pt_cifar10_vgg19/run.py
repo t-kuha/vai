@@ -48,12 +48,15 @@ if __name__ == '__main__':
     elif args.model_name == 'resnet':
         model = resnet_models.ResNet50()
         pth_path = 'trained_models_cifar10/resnet50_cifar10_lr01.pth'
+        int_name = 'ResNet_int.xmodel'
     elif args.model_name == 'xception':
         model = xception_cifar10.xception()
         pth_path = 'trained_models_cifar10/xception_cifar10_lr01.pth'
+        int_name = 'Xception_int.xmodel'
     elif args.model_name == 'inceptionv3':
         model = inceptionv3_cifar10.inceptionv3()
         pth_path = 'trained_models_cifar10/inceptionv3_cifar10_lr01.pth'
+        int_name = 'InceptionV3_int.xmodel'
     elif args.model_name == 'densenet':
         model = densenet_models.DenseNet169()
         pth_path = 'trained_models_cifar10/densenet169_cifar10_lr01.pth'
@@ -106,7 +109,7 @@ if __name__ == '__main__':
                 continue
             outputs = quantizer.quant_model(inputs.to(device))
             num_correct += torch.sum(torch.argmax(outputs, 1) == targets.to(device))
-        print(f'accuracy: {num_correct.item() * 100 / len(testset) * SKIP} %')
+        # print(f'accuracy: {num_correct.item() * 100 / len(testset) * SKIP} %')
 
     # deploy .xmodel
     if quant_mode == 'deploy':
@@ -116,11 +119,12 @@ if __name__ == '__main__':
         quantizer = torch_quantizer('test', model, (input), device=torch.device(device))
         quantizer.quant_model(input)
         quantizer.export_xmodel(deploy_check=True)
-        # at this point, .xmodel will be generated as quantize_result/VGG_int.xmodel
+        # at this point, .xmodel will be generated as quantize_result/*_int.xmodel
 
-        subprocess.run([
+        res = subprocess.run([
             'xcompiler',
             '-i', f'quantize_result/{int_name}',
             '-o', f'{args.model_name}_cifar10.xmodel',
-            '-f', {args.fingerprint}
-        ])
+            '-f', args.fingerprint
+        ], capture_output=True)
+        print(f'{res.returncode=:}')
