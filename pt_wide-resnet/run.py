@@ -1,4 +1,4 @@
-"""
+"""deploying Vitis-AI model.
 """
 import argparse
 import os
@@ -37,11 +37,9 @@ if __name__ == '__main__':
     if args.model_name == 'wide_resnet50':
         model_name = 'wide_resnet50_2'
         weights = torchvision.models.Wide_ResNet50_2_Weights.DEFAULT
-        # int_name = 'InceptionV3_int.xmodel'
     elif args.model_name == 'wide_resnet101':
         model_name = 'wide_resnet101_2'
         weights = torchvision.models.Wide_ResNet101_2_Weights.DEFAULT
-        # int_name = 'DenseNet_int.xmodel'
 
     quant_mode = args.mode
     device = 'cuda' if torch.cuda.is_available() else 'mps' if torch.backends.mps.is_available() else 'cpu'
@@ -56,17 +54,18 @@ if __name__ == '__main__':
         inspector.inspect(model, torch.randn([1, 3, 224, 224]), torch.device(device))
         sys.exit(0)
 
-    # load dataset when mode != inspect
-    transform = torchvision.transforms.Compose([
-        torchvision.transforms.Resize(232),
-        torchvision.transforms.CenterCrop(224),
-        torchvision.transforms.ToTensor(),
-        torchvision.transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
-    ])
+    if quant_mode in ['float', 'calib']:
+        # load dataset only when necessary
+        transform = torchvision.transforms.Compose([
+            torchvision.transforms.Resize(232),
+            torchvision.transforms.CenterCrop(224),
+            torchvision.transforms.ToTensor(),
+            torchvision.transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+        ])
 
-    testset = torchvision.datasets.ImageNet(
-        root=args.dataset_dir, split='val', transform=transform
-    )
+        testset = torchvision.datasets.ImageNet(
+            root=args.dataset_dir, split='val', transform=transform
+        )
 
     model.to(device)
     model.eval()
@@ -110,8 +109,8 @@ if __name__ == '__main__':
 
         res = subprocess.run([
             'xcompiler',
-            '-i', f'quantize_result/{int_name}',
-            '-o', f'{args.model_name}_cifar10.xmodel',
+            '-i', 'quantize_result/ResNet_int.xmodel',
+            '-o', f'{args.model_name}.xmodel',
             '-f', args.fingerprint
         ], capture_output=True)
         print(f'{res.returncode=:}')
