@@ -1,3 +1,9 @@
+"""code for on-device inference.
+
+Usage:
+    $ python inference.py <model name>
+"""
+import argparse
 import os
 import tqdm
 import numpy as np
@@ -30,10 +36,17 @@ def get_child_subgraph_dpu(xmodel_path: str) -> list[xir.Subgraph]:
 
 
 if __name__ == '__main__':
-    XMODEL_PATH = 'vgg19_cifar10.xmodel'
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        'model_name', type=str,
+        choices=['vgg19', 'resnet', 'xception', 'inceptionv3', 'densenet'], help='model name'
+    )
+    args = parser.parse_args()
+
+    xmodel_name = f'{args.model_name}_cifar10.xmodel'
 
     # load .xmodel
-    subgraphs = get_child_subgraph_dpu(XMODEL_PATH)
+    subgraphs = get_child_subgraph_dpu(xmodel_name)
     assert len(subgraphs) == 1  # only one DPU kernel
 
     print('[INFO] loading dataset...')

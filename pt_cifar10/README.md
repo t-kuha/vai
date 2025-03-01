@@ -8,11 +8,11 @@
 
 | config    | acc. (float) [%] | acc. (qaunt.) [%] |
 |:---------:|-------------:|-------------:|
-| DensNet   |        95.10 | |
-| Inception |        94.77 | |
-| ResNet50  |        95.30 | |
+| DensNet   |        95.10 |        91.95 |
+| Inception |        94.77 |        94.65 |
+| ResNet50  |        95.30 |        95.25 |
 | VGG19     |        93.18 |        92.89 |
-| Xception  |        93.49 | |
+| Xception  |        93.49 |        94.34 |
 
 ## how to deploy model
 
