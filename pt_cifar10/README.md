@@ -4,7 +4,7 @@
 
 ## model performance
 
-- Top-1 on CPU
+- Top-1 accuracy
 
 | config    | acc. (float) [%] | acc. (qaunt.) [%] |
 |:---------:|-------------:|-------------:|
