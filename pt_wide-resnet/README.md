@@ -16,7 +16,7 @@
 ```shell
 # check model's compatibility with Vitis AI:
 # model name: "wide_resnet50" or "wide_resnet101"
-$ python run.py <model name> inspact
+$ python run.py <model name> inspect
 
 # test float model performance:
 $ python run.py <model name> float

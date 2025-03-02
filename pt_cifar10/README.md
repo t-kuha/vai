@@ -20,7 +20,7 @@
 
 ```shell
 # check model's compatibility with Vitis AI:
-$ python run.py <model name> inspact
+$ python run.py <model name> inspect
 
 # test float model performance:
 $ python run.py <model name> float
