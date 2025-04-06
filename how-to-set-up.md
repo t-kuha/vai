@@ -10,9 +10,9 @@
 - Install Miniconda
 
 ```shell
-$ wget https://repo.anaconda.com/miniconda/Miniconda3-py38_23.11.0-2-Linux-x86_64.sh
+$ curl https://repo.anaconda.com/miniconda/Miniconda3-py38_23.11.0-2-Linux-x86_64.sh -o Miniconda3-py38_23.11.0-2-Linux-x86_64.sh
 $ chmod +x ./Miniconda3-py38_23.11.0-2-Linux-x86_64.sh
-$ ./Miniconda3-latest-Linux-x86_64.sh
+$ ./Miniconda3-py38_23.11.0-2-Linux-x86_64.sh
 
 $ conda create -n vai-pt
 $ conda create -n vai-tf2
